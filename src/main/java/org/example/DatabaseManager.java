@@ -14,9 +14,13 @@ import static java.sql.DriverManager.getConnection;
 
 public class DatabaseManager {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/usta_db";
-    private static final String DB_USER = "postgres";
-    private static final String DB_PASSWORD = "1";
+    //    private static final String DB_URL = "jdbc:postgresql://localhost:5432/usta_db";
+//    private static final String DB_USER = "postgres";
+//private static final String DB_PASSWORD = "1";/
+    private static final String DB_URL = "jdbc:postgresql://dpg-d1ovc3mr433s73cq8v60-a.oregon-postgres.render.com/nisbot";
+    private static final String DB_USER = "nisbot_user";
+    private static final String DB_PASSWORD = "wbxWGtUCvqoEdaHslkuSJGwgkjmVQ59F";
+
 
     public List<JobPosition> getJobPositions() {
         List<JobPosition> positions = new ArrayList<>();
@@ -66,18 +70,18 @@ public class DatabaseManager {
 
     public void saveUserApplication(long userId, Map<String, String> data, String username) {
         String sql = """
-        INSERT INTO user_applications (
-            user_id, full_name, phone, certificates, branch, cv_file_id, job_position, username
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT (user_id) DO UPDATE SET
-            full_name = EXCLUDED.full_name,
-            phone = EXCLUDED.phone,
-            certificates = EXCLUDED.certificates,
-            branch = EXCLUDED.branch,
-            cv_file_id = EXCLUDED.cv_file_id,
-            job_position = EXCLUDED.job_position,
-            username = EXCLUDED.username
-        """;
+                INSERT INTO user_applications (
+                    user_id, full_name, phone, certificates, branch, cv_file_id, job_position, username
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT (user_id) DO UPDATE SET
+                    full_name = EXCLUDED.full_name,
+                    phone = EXCLUDED.phone,
+                    certificates = EXCLUDED.certificates,
+                    branch = EXCLUDED.branch,
+                    cv_file_id = EXCLUDED.cv_file_id,
+                    job_position = EXCLUDED.job_position,
+                    username = EXCLUDED.username
+                """;
 
         try (Connection conn = getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -216,10 +220,10 @@ public class DatabaseManager {
 
     public void saveAcceptedApplication(Long userId, String fullName, String phone, String username, String certificates, String branch, String cvFileId, String jobPosition) {
         String sql = """
-        INSERT INTO accepted_applications (
-            user_id, full_name, phone_number, username, certificates, branch, cv_file_id, job_position
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+                INSERT INTO accepted_applications (
+                    user_id, full_name, phone_number, username, certificates, branch, cv_file_id, job_position
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -365,9 +369,9 @@ public class DatabaseManager {
 
     public void saveJobPosition(String name, String description, String requirements, boolean isActive) {
         String sql = """
-        INSERT INTO job_positions (name, is_active)
-        VALUES (?, ?)
-        """;
+                INSERT INTO job_positions (name, is_active)
+                VALUES (?, ?)
+                """;
 
         try (Connection conn = getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
